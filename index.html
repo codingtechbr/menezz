@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MENEZZI · Catálogo</title>
+<meta name="description" content="Bolsas, acessórios, perfumaria e presentes. Loja física em Antas-BA e envio para todo o Brasil.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#faf6f1; --surface:#ffffff; --ink:#1f1a17; --muted:#7a6f66; --line:#ece3d9;
+  --brand:#2b211c; --gold:#b08a5a; --gold-soft:#f3ebe0; --wa:#1fa855; --sale:#b4442f;
+  --radius:16px; --shadow:0 10px 30px -12px rgba(43,33,28,.25);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+[hidden]{display:none!important}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+.serif{font-family:"Cormorant Garamond",Georgia,serif}
+
+/* Header */
+header{position:sticky;top:0;z-index:30;background:rgba(250,246,241,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px;gap:12px}
+.logo{display:flex;align-items:center;gap:10px}
+.logo img{width:38px;height:38px;border-radius:50%;object-fit:cover;border:1px solid var(--line)}
+.logo b{font-family:"Cormorant Garamond",serif;font-size:26px;letter-spacing:.18em;font-weight:700}
+.nav-links{display:flex;gap:22px;font-size:14px;color:var(--muted)}
+.nav-links a:hover{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:12px 22px;font-weight:600;font-size:14px;transition:.2s}
+.btn-dark{background:var(--brand);color:#fff}.btn-dark:hover{background:#000}
+.btn-wa{background:var(--wa);color:#fff}.btn-wa:hover{filter:brightness(.95)}
+.btn-line{border:1px solid var(--brand)}.btn-line:hover{background:var(--brand);color:#fff}
+.btn svg{width:18px;height:18px}
+@media(max-width:720px){.nav-links{display:none}}
+
+/* Hero */
+.hero{position:relative;overflow:hidden;padding:72px 0 56px}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+.eyebrow{display:inline-block;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:14px}
+.hero h1{font-family:"Cormorant Garamond",serif;font-size:clamp(44px,7vw,80px);line-height:1;font-weight:600;letter-spacing:.02em}
+.hero p{color:var(--muted);font-size:17px;max-width:520px;margin:18px 0 28px}
+.hero .actions{display:flex;gap:12px;flex-wrap:wrap}
+.hero-art{aspect-ratio:4/5;border-radius:220px 220px 24px 24px;background:linear-gradient(160deg,#e9dccb,#c9ad8a);box-shadow:var(--shadow);overflow:hidden;position:relative}
+.hero-art img{width:100%;height:100%;object-fit:cover}
+.hero-art .ph{position:absolute;inset:0;display:grid;place-items:center;color:rgba(255,255,255,.9);font-family:"Cormorant Garamond",serif;font-size:64px;letter-spacing:.2em}
+.badges{display:flex;gap:18px;flex-wrap:wrap;margin-top:32px;font-size:13px;color:var(--muted)}
+.badges span{display:flex;align-items:center;gap:6px}
+.badges svg{width:16px;height:16px;color:var(--gold)}
+@media(max-width:820px){.hero{padding:40px 0}.hero-grid{grid-template-columns:1fr;gap:28px}.hero-art{max-width:340px;margin:0 auto;width:100%}}
+
+/* Catálogo */
+section{padding:56px 0}
+.sec-head{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.sec-head h2{font-family:"Cormorant Garamond",serif;font-size:40px;font-weight:600;line-height:1.1}
+.search{position:relative;flex:1;max-width:340px;min-width:200px}
+.search input{width:100%;padding:12px 16px 12px 42px;border:1px solid var(--line);border-radius:999px;background:var(--surface);font:inherit;font-size:14px;outline:none}
+.search input:focus{border-color:var(--gold)}
+.search svg{position:absolute;left:15px;top:50%;transform:translateY(-50%);width:17px;color:var(--muted)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:26px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{white-space:nowrap;padding:9px 18px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:14px;color:var(--muted);transition:.2s}
+.chip.on,.chip:hover{background:var(--brand);color:#fff;border-color:var(--brand)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:22px}
+@media(max-width:520px){.grid{grid-template-columns:repeat(2,1fr);gap:12px}}
+.card{background:var(--surface);border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);display:flex;flex-direction:column;transition:.25s}
+.card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.card .img{aspect-ratio:4/5;background:var(--gold-soft);position:relative;cursor:pointer;overflow:hidden}
+.card .img img{width:100%;height:100%;object-fit:cover;transition:.4s}
+.card:hover .img img{transform:scale(1.04)}
+.tag{position:absolute;top:10px;left:10px;background:var(--sale);color:#fff;font-size:11px;font-weight:600;padding:4px 9px;border-radius:999px}
+.tag.dest{background:var(--gold)}
+.tag.out{background:#6b625b}
+.card .body{padding:14px 14px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.card .cat{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:600}
+.card h3{font-size:15px;font-weight:500;cursor:pointer;line-height:1.35}
+.price{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-top:auto;padding-top:4px}
+.price b{font-size:18px;font-weight:600}
+.price s{font-size:13px;color:var(--muted)}
+.card .btn{margin-top:10px;width:100%;padding:11px}
+@media(max-width:520px){.card .body{padding:10px}.card h3{font-size:13.5px}.price b{font-size:15px}.card .btn{font-size:13px;padding:10px 8px}}
+.empty{text-align:center;color:var(--muted);padding:60px 0}
+.skel{background:linear-gradient(90deg,#efe6db 25%,#f7f1ea 50%,#efe6db 75%);background-size:200% 100%;animation:sk 1.2s infinite;border-radius:var(--radius);aspect-ratio:3/4}
+@keyframes sk{to{background-position:-200% 0}}
+
+/* Sobre */
+.about{background:var(--brand);color:#f3ebe0}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.about h2{font-family:"Cormorant Garamond",serif;font-size:44px;font-weight:600;color:#fff;line-height:1.1;margin-bottom:16px}
+.about p{color:#cfc2b4;font-size:16px}
+.info{display:grid;gap:14px}
+.info div{display:flex;gap:14px;align-items:flex-start;padding:18px;border:1px solid rgba(255,255,255,.12);border-radius:14px}
+.info svg{width:22px;height:22px;color:var(--gold);flex-shrink:0;margin-top:2px}
+.info small{display:block;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#a8998a}
+.info a{text-decoration:underline;text-underline-offset:3px}
+@media(max-width:820px){.about-grid{grid-template-columns:1fr;gap:28px}}
+
+footer{padding:28px 0;text-align:center;color:var(--muted);font-size:13px;border-top:1px solid var(--line)}
+footer a{color:var(--muted);opacity:.6}
+
+/* WhatsApp flutuante */
+.fab{position:fixed;right:18px;bottom:18px;z-index:40;width:58px;height:58px;border-radius:50%;background:var(--wa);color:#fff;display:grid;place-items:center;box-shadow:0 10px 25px -6px rgba(31,168,85,.6)}
+.fab svg{width:30px;height:30px}
+
+/* Modal produto */
+.modal{position:fixed;inset:0;z-index:50;background:rgba(20,15,12,.55);display:none;align-items:center;justify-content:center;padding:16px}
+.modal.open{display:flex}
+.sheet{background:var(--surface);border-radius:22px;max-width:900px;width:100%;max-height:92vh;overflow:auto;display:grid;grid-template-columns:1fr 1fr;position:relative}
+.sheet .x{position:absolute;top:12px;right:12px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.92);display:grid;place-items:center;z-index:2;font-size:22px}
+.gal{background:var(--gold-soft)}
+.gal .main{aspect-ratio:4/5}
+.gal .main img{width:100%;height:100%;object-fit:cover}
+.thumbs{display:flex;gap:8px;padding:10px;overflow-x:auto}
+.thumbs img{width:58px;height:58px;object-fit:cover;border-radius:10px;cursor:pointer;opacity:.55;border:2px solid transparent}
+.thumbs img.on{opacity:1;border-color:var(--gold)}
+.det{padding:30px 28px;display:flex;flex-direction:column;gap:14px}
+.det h3{font-family:"Cormorant Garamond",serif;font-size:32px;font-weight:600;line-height:1.1}
+.det .price b{font-size:26px}
+.det p.desc{color:var(--muted);white-space:pre-line;font-size:15px}
+.lbl{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:8px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opts button{padding:8px 14px;border:1px solid var(--line);border-radius:10px;font-size:14px}
+.opts button.on{border-color:var(--brand);background:var(--brand);color:#fff}
+.qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px}
+.qty button{width:40px;height:40px;font-size:18px}
+.qty span{min-width:30px;text-align:center;font-weight:600}
+.det .btn-wa{padding:15px;font-size:15px;margin-top:6px}
+.stock{font-size:13px;color:var(--muted)}
+@media(max-width:720px){.modal{padding:0;align-items:flex-end}.sheet{grid-template-columns:1fr;border-radius:22px 22px 0 0;max-height:94vh}.det{padding:22px 18px 28px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="#" class="logo"><img id="logoImg" alt="" hidden><b id="logoTxt">MENEZZI</b></a>
+    <nav class="nav-links"><a href="#catalogo">Catálogo</a><a href="#sobre">A loja</a><a href="#sobre">Contato</a></nav>
+    <a class="btn btn-wa" id="headWa" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><use href="#i-wa"/></svg><span>WhatsApp</span></a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow" id="heroCity">Antas - BA · Envio para todo o Brasil</span>
+      <h1 id="heroNome">MENEZZI</h1>
+      <p id="heroSlogan">Bolsas, acessórios, perfumaria e presentes</p>
+      <div class="actions">
+        <a href="#catalogo" class="btn btn-dark">Ver catálogo</a>
+        <a class="btn btn-line" id="heroWa" target="_blank" rel="noopener">Falar com a loja</a>
+      </div>
+      <div class="badges">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h13v10H3zM16 10h4l1 3v4h-5"/><circle cx="7" cy="18" r="1.6"/><circle cx="18" cy="18" r="1.6"/></svg>Enviamos para todo o Brasil</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-6 9 6v11H3z"/><path d="M9 20v-6h6v6"/></svg>Loja física</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12v9H4v-9M2 7h20v5H2zM12 21V7M12 7S10 3 7.5 3a2 2 0 000 4H12zM12 7s2-4 4.5-4a2 2 0 010 4H12z"/></svg>Embalagem para presente</span>
+      </div>
+    </div>
+    <div class="hero-art" id="heroArt"><div class="ph">M</div></div>
+  </div>
+</section>
+
+<section id="catalogo">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><span class="eyebrow">Nossa vitrine</span><h2>Catálogo</h2></div>
+      <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="busca" placeholder="Buscar produto…" aria-label="Buscar produto"></label>
+    </div>
+    <div class="chips" id="chips"></div>
+    <div class="grid" id="grid">
+      <div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div>
+    </div>
+  </div>
+</section>
+
+<section class="about" id="sobre">
+  <div class="wrap about-grid">
+    <div>
+      <span class="eyebrow">A loja</span>
+      <h2 id="sobreTit">Sobre a MENEZZI</h2>
+      <p id="sobreDesc"></p>
+    </div>
+    <div class="info">
+      <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-6.5 7-12a7 7 0 10-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg><span><small>Endereço</small><span id="infoEnd"></span></span></div>
+      <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span><small>Horário</small><span id="infoHor"></span></span></div>
+      <div><svg viewBox="0 0 24 24" fill="currentColor"><use href="#i-wa"/></svg><span><small>WhatsApp</small><a id="infoWa" target="_blank" rel="noopener">Chamar no WhatsApp</a></span></div>
+      <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg><span><small>Instagram</small><a id="infoIg" target="_blank" rel="noopener"></a></span></div>
+    </div>
+  </div>
+</section>
+
+<footer>© <span id="ano"></span> <span id="footNome">MENEZZI</span> · Todos os direitos reservados · <a href="admin.html">área da loja</a></footer>
+
+<a class="fab" id="fab" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><use href="#i-wa"/></svg></a>
+
+<div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
+
+<svg width="0" height="0" style="position:absolute"><symbol id="i-wa" viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3zM12 21.8c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4c-1-1.6-1.5-3.4-1.5-5.2C2.2 6.6 6.6 2.2 12 2.2c2.6 0 5.1 1 6.9 2.9 1.8 1.8 2.9 4.3 2.9 6.9 0 5.4-4.4 9.8-9.8 9.8zM20.4 3.6C18.1 1.3 15.2 0 12 0 5.4 0 0 5.4 0 12c0 2.1.6 4.2 1.6 6L0 24l6.2-1.6c1.8 1 3.8 1.5 5.8 1.5 6.6 0 12-5.4 12-12 0-3.2-1.3-6.2-3.6-8.3z"/></symbol></svg>
+
+<script type="module">
+import { db, COL, LOJA_PADRAO, brl, esc } from "./js/firebase.js";
+import { doc, onSnapshot, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const $ = (s) => document.querySelector(s);
+let loja = { ...LOJA_PADRAO }, cats = [], prods = [], filtroCat = "todos", busca = "";
+$("#ano").textContent = new Date().getFullYear();
+
+const waUrl = (msg) => {
+  const n = String(loja.whatsapp || "").replace(/\D/g, "");
+  if (n) return `https://wa.me/${n.length <= 11 ? "55" + n : n}${msg ? "?text=" + encodeURIComponent(msg) : ""}`;
+  return loja.whatsappLink || "#";
+};
+const precoHTML = (p, promo) => precoFinal(p) ? `<b>${brl(precoFinal(p))}</b>${promo ? `<s>${brl(p.preco)}</s>` : ""}` : `<b style="font-size:15px;font-weight:500;color:var(--gold)">Consulte o preço</b>`;
+const precoFinal = (p) => (p.precoPromo && Number(p.precoPromo) < Number(p.preco) ? Number(p.precoPromo) : Number(p.preco));
+
+function renderLoja() {
+  document.title = `${loja.nome} · Catálogo`;
+  $("#logoTxt").textContent = loja.nome; $("#heroNome").textContent = loja.nome; $("#footNome").textContent = loja.nome;
+  $("#heroSlogan").textContent = loja.slogan;
+  $("#heroCity").textContent = `${loja.endereco?.split(",").pop().trim() || ""} · Envio para todo o Brasil`;
+  $("#sobreTit").textContent = `Sobre a ${loja.nome}`;
+  $("#sobreDesc").textContent = loja.descricao;
+  $("#infoEnd").textContent = loja.endereco; $("#infoHor").textContent = loja.horario;
+  const ig = String(loja.instagram || "").replace(/^@/, "");
+  $("#infoIg").textContent = "@" + ig; $("#infoIg").href = `https://www.instagram.com/${ig}/`;
+  const geral = waUrl(`Olá, ${loja.nome}! Vim pelo catálogo e gostaria de mais informações.`);
+  ["#headWa", "#heroWa", "#infoWa", "#fab"].forEach((s) => ($(s).href = geral));
+  if (loja.logo) { $("#logoImg").src = loja.logo; $("#logoImg").hidden = false; }
+  if (loja.banner || loja.logo) $("#heroArt").innerHTML = `<img src="${esc(loja.banner || loja.logo)}" alt="${esc(loja.nome)}">`;
+}
+
+function renderChips() {
+  const usadas = cats.filter((c) => prods.some((p) => p.categoriaId === c.id && p.ativo !== false));
+  $("#chips").innerHTML = [`<button class="chip ${filtroCat === "todos" ? "on" : ""}" data-c="todos">Todos</button>`]
+    .concat(usadas.map((c) => `<button class="chip ${filtroCat === c.id ? "on" : ""}" data-c="${c.id}">${esc(c.nome)}</button>`)).join("");
+}
+$("#chips").onclick = (e) => { const b = e.target.closest(".chip"); if (!b) return; filtroCat = b.dataset.c; renderChips(); renderGrid(); };
+$("#busca").oninput = (e) => { busca = e.target.value.toLowerCase().trim(); renderGrid(); };
+
+function renderGrid() {
+  const nomeCat = (id) => cats.find((c) => c.id === id)?.nome || "";
+  let lista = prods.filter((p) => p.ativo !== false)
+    .filter((p) => filtroCat === "todos" || p.categoriaId === filtroCat)
+    .filter((p) => !busca || (p.nome + " " + (p.descricao || "") + " " + nomeCat(p.categoriaId)).toLowerCase().includes(busca))
+    .sort((a, b) => (b.destaque ? 1 : 0) - (a.destaque ? 1 : 0) || (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0));
+  if (!lista.length) { $("#grid").innerHTML = `<p class="empty" style="grid-column:1/-1">${prods.length ? "Nenhum produto encontrado." : "Em breve novidades por aqui ✨"}</p>`; return; }
+  $("#grid").innerHTML = lista.map((p) => {
+    const promo = p.precoPromo && Number(p.precoPromo) < Number(p.preco);
+    const esgot = p.estoque !== undefined && p.estoque !== null && p.estoque !== "" && Number(p.estoque) <= 0;
+    const tag = esgot ? `<span class="tag out">Esgotado</span>` : promo ? `<span class="tag">-${Math.round((1 - p.precoPromo / p.preco) * 100)}%</span>` : p.destaque ? `<span class="tag dest">Destaque</span>` : "";
+    const img = p.imagens?.[0] ? `<img src="${esc(p.imagens[0])}" alt="${esc(p.nome)}" loading="lazy">` : "";
+    return `<article class="card">
+      <div class="img" data-open="${p.id}">${img}${tag}</div>
+      <div class="body">
+        <span class="cat">${esc(nomeCat(p.categoriaId))}</span>
+        <h3 data-open="${p.id}">${esc(p.nome)}</h3>
+        <div class="price">${precoHTML(p, promo)}</div>
+        <button class="btn ${esgot ? "btn-line" : "btn-wa"}" data-open="${p.id}">${esgot ? "Consultar" : "Comprar"}</button>
+      </div></article>`;
+  }).join("");
+}
+$("#grid").onclick = (e) => { const el = e.target.closest("[data-open]"); if (el) abrir(el.dataset.open); };
+
+// Modal do produto
+let atual = null, varSel = "", qtd = 1;
+function abrir(id) {
+  atual = prods.find((p) => p.id === id); if (!atual) return;
+  varSel = ""; qtd = 1;
+  const p = atual, imgs = p.imagens?.length ? p.imagens : [];
+  const promo = p.precoPromo && Number(p.precoPromo) < Number(p.preco);
+  const vars = (p.variacoes || []).filter(Boolean);
+  const temEst = p.estoque !== undefined && p.estoque !== null && p.estoque !== "";
+  $("#sheet").innerHTML = `
+    <button class="x" data-x aria-label="Fechar">×</button>
+    <div class="gal"><div class="main">${imgs[0] ? `<img id="mainImg" src="${esc(imgs[0])}" alt="${esc(p.nome)}">` : ""}</div>
+      ${imgs.length > 1 ? `<div class="thumbs">${imgs.map((u, i) => `<img src="${esc(u)}" data-i="${i}" class="${i ? "" : "on"}" alt="">`).join("")}</div>` : ""}</div>
+    <div class="det">
+      <span class="cat eyebrow" style="margin:0">${esc(cats.find((c) => c.id === p.categoriaId)?.nome || "")}</span>
+      <h3>${esc(p.nome)}</h3>
+      <div class="price">${precoHTML(p, promo)}</div>
+      ${p.descricao ? `<p class="desc">${esc(p.descricao)}</p>` : ""}
+      ${vars.length ? `<div><div class="lbl">Opção</div><div class="opts" id="opts">${vars.map((v) => `<button data-v="${esc(v)}">${esc(v)}</button>`).join("")}</div></div>` : ""}
+      <div><div class="lbl">Quantidade</div><div class="qty"><button data-q="-1">−</button><span id="qtd">1</span><button data-q="1">+</button></div></div>
+      ${temEst ? `<span class="stock">${Number(p.estoque) > 0 ? `${p.estoque} disponível(is)` : "Esgotado no momento — consulte disponibilidade"}</span>` : ""}
+      <button class="btn btn-wa" data-buy><svg viewBox="0 0 24 24" fill="currentColor"><use href="#i-wa"/></svg>Comprar pelo WhatsApp</button>
+    </div>`;
+  $("#modal").classList.add("open"); document.body.style.overflow = "hidden";
+}
+function fechar() { $("#modal").classList.remove("open"); document.body.style.overflow = ""; }
+$("#modal").onclick = (e) => {
+  if (e.target.id === "modal" || e.target.closest("[data-x]")) return fechar();
+  const t = e.target.closest("[data-i]"); if (t) { $("#mainImg").src = t.src; document.querySelectorAll(".thumbs img").forEach((i) => i.classList.toggle("on", i === t)); }
+  const v = e.target.closest("[data-v]"); if (v) { varSel = v.dataset.v; document.querySelectorAll("#opts button").forEach((b) => b.classList.toggle("on", b === v)); }
+  const q = e.target.closest("[data-q]"); if (q) { qtd = Math.max(1, qtd + Number(q.dataset.q)); $("#qtd").textContent = qtd; }
+  if (e.target.closest("[data-buy]")) comprar();
+};
+document.addEventListener("keydown", (e) => e.key === "Escape" && fechar());
+
+function comprar() {
+  const p = atual; if (!p) return;
+  if ((p.variacoes || []).filter(Boolean).length && !varSel) { const o = $("#opts"); o.animate([{ transform: "translateX(-6px)" }, { transform: "translateX(6px)" }, { transform: "none" }], 250); return; }
+  const unit = precoFinal(p);
+  const msg = `Olá, ${loja.nome}! 👋\nQuero comprar:\n\n🛍️ *${p.nome}*${varSel ? `\nOpção: ${varSel}` : ""}\nQuantidade: ${qtd}\nValor: ${unit ? brl(unit * qtd) : "a consultar"}\n\nVi no catálogo: ${location.href.split("#")[0]}`;
+  window.open(waUrl(msg), "_blank");
+  // registra o interesse para aparecer no painel (não bloqueia o cliente)
+  addDoc(collection(db, COL.pedidos), { produtoId: p.id, produto: p.nome, preco: unit, variacao: varSel, qtd, status: "novo", criadoEm: serverTimestamp() }).catch(() => {});
+}
+
+// Dados em tempo real
+renderLoja();
+onSnapshot(doc(db, COL.config, "loja"), (s) => { if (s.exists()) { loja = { ...LOJA_PADRAO, ...s.data() }; renderLoja(); } }, console.warn);
+onSnapshot(collection(db, COL.categorias), (s) => { cats = s.docs.map((d) => ({ id: d.id, ...d.data() })).sort((a, b) => (a.ordem ?? 99) - (b.ordem ?? 99) || a.nome.localeCompare(b.nome)); renderChips(); renderGrid(); }, console.warn);
+onSnapshot(collection(db, COL.produtos), (s) => { prods = s.docs.map((d) => ({ id: d.id, ...d.data() })); renderChips(); renderGrid(); },
+  (err) => { console.warn(err); $("#grid").innerHTML = `<p class="empty" style="grid-column:1/-1">Não foi possível carregar o catálogo agora.</p>`; });
+</script>
+</body>
+</html>

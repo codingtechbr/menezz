@@ -1,0 +1,31 @@
+rules_version = '2';
+// Regras do Firestore para o catálogo MENEZZI.
+// ATENÇÃO: se este projeto Firebase já tem outras regras (ex.: do EduPro),
+// copie apenas os blocos "menezzi_*" para dentro das regras existentes.
+// Troque o e-mail abaixo pelo e-mail da conta admin criada no Firebase Authentication.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email in ['TROQUE-PELO-EMAIL-DA-ADMIN@gmail.com'];
+    }
+
+    // Público pode ler a vitrine; só a admin escreve
+    match /menezzi_config/{id}     { allow read: if true; allow write: if isAdmin(); }
+    match /menezzi_categorias/{id} { allow read: if true; allow write: if isAdmin(); }
+    match /menezzi_produtos/{id}   { allow read: if true; allow write: if isAdmin(); }
+
+    // Cliente registra o interesse ao clicar em "Comprar"; só a admin lê/edita
+    match /menezzi_pedidos/{id} {
+      allow create: if request.resource.data.keys().hasOnly(['produtoId','produto','preco','variacao','qtd','status','criadoEm'])
+                    && request.resource.data.status == 'novo'
+                    && request.resource.data.produto is string
+                    && request.resource.data.produto.size() < 200;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Vendas: só a admin
+    match /menezzi_vendas/{id} { allow read, write: if isAdmin(); }
+  }
+}

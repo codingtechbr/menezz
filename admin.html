@@ -1,0 +1,747 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MENEZZI · Painel da loja</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f2ed;--surface:#fff;--ink:#1f1a17;--muted:#7a6f66;--line:#ebe2d8;--brand:#2b211c;--gold:#b08a5a;--soft:#f3ebe0;--ok:#1f8a4c;--warn:#c27a12;--bad:#b4442f;--wa:#1fa855;--r:14px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+input,select,textarea{font:inherit;color:inherit}
+a{color:inherit}
+.hide{display:none!important}
+.serif{font-family:"Cormorant Garamond",serif}
+
+/* Login */
+#login{min-height:100vh;display:grid;place-items:center;padding:16px;background:radial-gradient(circle at 20% 10%,#efe2d0,transparent 50%),var(--bg)}
+.login-box{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:36px 30px;width:100%;max-width:380px;box-shadow:0 20px 50px -25px rgba(43,33,28,.35)}
+.login-box h1{font-family:"Cormorant Garamond",serif;font-size:36px;letter-spacing:.16em;text-align:center}
+.login-box p{text-align:center;color:var(--muted);margin:4px 0 24px}
+
+/* Form */
+.f{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.f label{font-size:12px;font-weight:600;color:var(--muted)}
+.in{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;outline:none;transition:.15s}
+.in:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(176,138,90,.15)}
+textarea.in{min-height:90px;resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:600px){.row,.row3{grid-template-columns:1fr}}
+.check{display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer}
+.check input{width:18px;height:18px;accent-color:var(--brand)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 16px;border-radius:10px;font-weight:600;font-size:13.5px;transition:.15s;white-space:nowrap}
+.btn svg{width:16px;height:16px}
+.btn-p{background:var(--brand);color:#fff}.btn-p:hover{background:#000}
+.btn-g{background:var(--soft);color:var(--brand)}.btn-g:hover{background:#ead9c4}
+.btn-o{border:1px solid var(--line);background:#fff}.btn-o:hover{border-color:var(--gold)}
+.btn-d{color:var(--bad)}.btn-d:hover{background:#fbeae6}
+.btn-wa{background:var(--wa);color:#fff}
+.btn-sm{padding:6px 10px;font-size:12.5px;border-radius:8px}
+.btn-block{width:100%;padding:13px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.err{color:var(--bad);font-size:13px;min-height:18px;margin-top:8px;text-align:center}
+
+/* Layout */
+#app{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+aside{background:var(--brand);color:#e8dccd;padding:22px 14px;display:flex;flex-direction:column;gap:4px;position:sticky;top:0;height:100vh}
+aside .brand{font-family:"Cormorant Garamond",serif;font-size:26px;letter-spacing:.18em;color:#fff;padding:0 10px 4px}
+aside .sub{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#a8998a;padding:0 10px 20px}
+.nav-i{display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:10px;color:#cfc2b4;font-weight:500;text-align:left;width:100%}
+.nav-i svg{width:18px;height:18px;flex-shrink:0}
+.nav-i:hover{background:rgba(255,255,255,.06);color:#fff}
+.nav-i.on{background:rgba(255,255,255,.12);color:#fff}
+.nav-i .bdg{margin-left:auto;background:var(--gold);color:#fff;font-size:11px;font-weight:700;padding:1px 7px;border-radius:999px}
+aside .foot{margin-top:auto;display:flex;flex-direction:column;gap:4px;border-top:1px solid rgba(255,255,255,.1);padding-top:12px}
+main{padding:28px 32px 60px;min-width:0}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.top h2{font-family:"Cormorant Garamond",serif;font-size:34px;font-weight:700;line-height:1}
+.top .sub{color:var(--muted);margin-top:4px}
+.mob-nav{display:none}
+@media(max-width:900px){
+  #app{grid-template-columns:1fr}
+  aside{display:none}
+  .mob-nav{display:flex;position:sticky;top:0;z-index:20;background:var(--brand);overflow-x:auto;gap:2px;padding:8px;scrollbar-width:none}
+  .mob-nav::-webkit-scrollbar{display:none}
+  .mob-nav .nav-i{width:auto;white-space:nowrap;padding:9px 12px;font-size:13px}
+  main{padding:20px 16px 60px}
+}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.card h3{font-size:15px;font-weight:600;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.grid{display:grid;gap:16px}
+.g4{grid-template-columns:repeat(4,1fr)}
+.g2{grid-template-columns:1fr 1fr}
+@media(max-width:1100px){.g4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.g2{grid-template-columns:1fr}}
+@media(max-width:420px){.g4{grid-template-columns:1fr 1fr;gap:10px}}
+.kpi small{font-size:12px;color:var(--muted);font-weight:500}
+.kpi b{display:block;font-size:26px;font-weight:700;margin-top:4px;letter-spacing:-.01em}
+.kpi span{font-size:12px;color:var(--muted)}
+@media(max-width:420px){.kpi b{font-size:20px}.card{padding:14px}}
+
+.periodo{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.periodo button{padding:7px 12px;border-radius:999px;border:1px solid var(--line);background:#fff;font-size:12.5px;font-weight:500}
+.periodo button.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+.periodo input{padding:6px 8px;border:1px solid var(--line);border-radius:8px;font-size:12.5px}
+
+/* gráfico de barras */
+.chart{display:flex;align-items:flex-end;gap:4px;height:200px;padding-top:10px;overflow-x:auto}
+.bar{flex:1;min-width:14px;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end}
+.bar i{display:block;width:100%;max-width:38px;background:var(--gold);border-radius:6px 6px 2px 2px;min-height:2px;transition:.3s;position:relative}
+.bar i:hover{background:var(--brand)}
+.bar span{font-size:10px;color:var(--muted);white-space:nowrap}
+.bar i[data-v]:hover::after{content:attr(data-v);position:absolute;bottom:100%;left:50%;transform:translate(-50%,-6px);background:var(--brand);color:#fff;font-size:11px;padding:3px 7px;border-radius:6px;white-space:nowrap;font-style:normal}
+.hbar{display:grid;grid-template-columns:minmax(90px,1.2fr) 2fr auto;gap:10px;align-items:center;padding:7px 0;font-size:13px}
+.hbar .t{height:8px;background:var(--soft);border-radius:99px;overflow:hidden}
+.hbar .t i{display:block;height:100%;background:var(--gold);border-radius:99px}
+.hbar .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hbar b{font-weight:600;font-size:12.5px}
+
+/* Tabelas */
+.tbl-w{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:#fff}
+table{width:100%;border-collapse:collapse}
+th{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);background:#fcfaf7;white-space:nowrap}
+td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;white-space:nowrap}
+.thumb{width:46px;height:46px;border-radius:10px;object-fit:cover;background:var(--soft);display:block}
+.pill{display:inline-block;padding:3px 9px;border-radius:999px;font-size:11.5px;font-weight:600;background:var(--soft);color:var(--brand)}
+.pill.ok{background:#e3f3ea;color:var(--ok)}.pill.warn{background:#fbf0de;color:var(--warn)}.pill.bad{background:#fbeae6;color:var(--bad)}.pill.mut{background:#eee;color:#777}
+.acts{display:flex;gap:4px;justify-content:flex-end}
+.empty{padding:40px;text-align:center;color:var(--muted)}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+.toolbar .in{max-width:280px}
+
+/* PDV */
+.pdv{display:grid;grid-template-columns:1fr 400px;gap:16px;align-items:start}
+@media(max-width:1100px){.pdv{grid-template-columns:1fr}}
+.plist{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;max-height:62vh;overflow:auto;padding:2px}
+.pitem{border:1px solid var(--line);border-radius:12px;background:#fff;text-align:left;overflow:hidden;transition:.15s}
+.pitem:hover{border-color:var(--gold);transform:translateY(-1px)}
+.pitem img,.pitem .ni{width:100%;aspect-ratio:1/1;object-fit:cover;background:var(--soft);display:block}
+.pitem div{padding:8px 10px}
+.pitem b{display:block;font-size:12.5px;font-weight:500;line-height:1.3;height:2.6em;overflow:hidden}
+.pitem span{font-size:13px;font-weight:700}
+.pitem small{font-size:11px;color:var(--muted);display:block}
+.cart-i{display:grid;grid-template-columns:1fr auto;gap:6px 10px;padding:10px 0;border-bottom:1px dashed var(--line)}
+.cart-i .n{font-weight:600;font-size:13px}
+.cart-i .ctr{display:flex;gap:6px;align-items:center;grid-column:1/-1;flex-wrap:wrap}
+.cart-i .ctr .in{padding:6px 8px;font-size:13px}
+.qt{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:8px}
+.qt button{width:28px;height:30px;font-size:16px}
+.qt span{min-width:22px;text-align:center;font-weight:600}
+.tot{display:flex;justify-content:space-between;padding:6px 0;font-size:14px}
+.tot.big{font-size:20px;font-weight:700;border-top:1px solid var(--line);padding-top:12px;margin-top:6px}
+.pay{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+.pay button{padding:9px;border:1px solid var(--line);border-radius:10px;font-weight:500;font-size:13px;background:#fff}
+.pay button.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+
+/* Modal */
+.modal{position:fixed;inset:0;background:rgba(20,15,12,.5);z-index:60;display:none;align-items:flex-start;justify-content:center;padding:30px 16px;overflow:auto}
+.modal.open{display:flex}
+.mbox{background:#fff;border-radius:18px;width:100%;max-width:680px;padding:24px;position:relative}
+.mbox h3{font-family:"Cormorant Garamond",serif;font-size:28px;margin-bottom:18px}
+.mbox .x{position:absolute;right:14px;top:12px;font-size:24px;width:36px;height:36px;border-radius:50%}
+.mbox .x:hover{background:var(--soft)}
+.imgs{display:flex;gap:10px;flex-wrap:wrap}
+.imgs .im{position:relative;width:92px;height:92px;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+.imgs .im img{width:100%;height:100%;object-fit:cover}
+.imgs .im button{position:absolute;top:4px;right:4px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;font-size:13px;line-height:1}
+.imgs .im .cap{position:absolute;left:4px;bottom:4px;background:var(--gold);color:#fff;font-size:10px;padding:1px 6px;border-radius:99px;font-weight:600}
+.imgs .add{width:92px;height:92px;border:2px dashed var(--line);border-radius:12px;display:grid;place-items:center;color:var(--muted);font-size:12px;text-align:center;cursor:pointer}
+.imgs .add:hover{border-color:var(--gold);color:var(--gold)}
+.mfoot{display:flex;justify-content:flex-end;gap:8px;margin-top:10px;padding-top:16px;border-top:1px solid var(--line)}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(120px);background:var(--brand);color:#fff;padding:12px 20px;border-radius:12px;z-index:99;transition:.3s;max-width:92vw;font-weight:500;box-shadow:0 10px 30px -10px rgba(0,0,0,.4)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.bad{background:var(--bad)}
+.logo-prev{width:90px;height:90px;border-radius:50%;object-fit:cover;background:var(--soft);border:1px solid var(--line)}
+.ban-prev{width:100%;max-width:240px;aspect-ratio:4/5;object-fit:cover;border-radius:12px;background:var(--soft);border:1px solid var(--line)}
+.muted{color:var(--muted)}
+.cat-row{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--line)}
+.cat-row:last-child{border:0}
+.cat-row .in{flex:1;padding:8px 10px}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login" class="hide">
+  <form class="login-box" id="fLogin">
+    <h1>MENEZZI</h1>
+    <p>Painel da loja</p>
+    <div class="f"><label>E-mail</label><input class="in" type="email" id="lEmail" required autocomplete="username"></div>
+    <div class="f"><label>Senha</label><input class="in" type="password" id="lSenha" required autocomplete="current-password"></div>
+    <button class="btn btn-p btn-block" id="lBtn">Entrar</button>
+    <div class="err" id="lErr"></div>
+    <p style="margin:16px 0 0;font-size:12px"><a href="index.html">← Ver catálogo</a></p>
+  </form>
+</div>
+
+<!-- APP -->
+<div id="app" class="hide">
+  <aside>
+    <div class="brand" id="sbNome">MENEZZI</div>
+    <div class="sub">Painel da loja</div>
+    <div id="navD"></div>
+    <div class="foot">
+      <a class="nav-i" href="index.html" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3h7v7M10 14L21 3M21 14v7H3V3h7"/></svg>Ver catálogo</a>
+      <button class="nav-i" data-sair><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H4V3h5M16 17l5-5-5-5M21 12H9"/></svg>Sair</button>
+    </div>
+  </aside>
+  <div style="min-width:0">
+    <nav class="mob-nav" id="navM"></nav>
+    <main id="main"></main>
+  </div>
+</div>
+
+<div class="modal" id="modal"><div class="mbox" id="mbox"></div></div>
+<div class="toast" id="toast"></div>
+<input type="file" id="fileIn" accept="image/*" multiple hidden>
+
+<script type="module">
+import { app, db, COL, LOJA_PADRAO, brl, esc } from "./js/firebase.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { collection, doc, onSnapshot, addDoc, setDoc, updateDoc, deleteDoc, writeBatch, increment, serverTimestamp, Timestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const auth = getAuth(app);
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => [...document.querySelectorAll(s)];
+const num = (v) => { let s = String(v ?? "").replace(/[^\d.,-]/g, ""); if (s.includes(",")) s = s.replace(/\./g, "").replace(",", "."); const n = parseFloat(s); return isNaN(n) ? 0 : n; };
+const fmtN = (v) => (Number(v) || 0).toFixed(2).replace(".", ",");
+const toDate = (t) => (t?.toDate ? t.toDate() : t ? new Date(t) : null);
+const fData = (d) => d ? d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "2-digit" }) + " " + d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }) : "—";
+const ymd = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+const PAGAMENTOS = ["Pix", "Dinheiro", "Cartão de crédito", "Cartão de débito"];
+
+function toast(msg, bad = false) {
+  const t = $("#toast"); t.textContent = msg; t.className = "toast show" + (bad ? " bad" : "");
+  clearTimeout(t._t); t._t = setTimeout(() => (t.className = "toast"), 3200);
+}
+const erroFirebase = (e) => {
+  console.error(e);
+  toast(e?.code === "permission-denied" ? "Sem permissão no Firebase. Confira as regras do Firestore (veja o README)." : "Erro: " + (e?.message || e), true);
+};
+
+/* ---------- Estado ---------- */
+const S = { loja: { ...LOJA_PADRAO }, cats: [], prods: [], vendas: [], pedidos: [], view: "relatorios",
+  periodo: "30", de: "", ate: "", cart: [], pag: "Pix", desconto: "", cliente: "", obs: "", pedidoOrigem: null, buscaPdv: "", buscaProd: "", filtroCatProd: "", buscaVendas: "" };
+let unsub = [];
+
+/* ---------- Auth ---------- */
+onAuthStateChanged(auth, (u) => {
+  unsub.forEach((f) => f()); unsub = [];
+  $("#login").classList.toggle("hide", !!u); $("#app").classList.toggle("hide", !u);
+  if (u) iniciar();
+});
+$("#fLogin").onsubmit = async (e) => {
+  e.preventDefault(); $("#lErr").textContent = ""; $("#lBtn").disabled = true;
+  try { await signInWithEmailAndPassword(auth, $("#lEmail").value.trim(), $("#lSenha").value); }
+  catch (err) { $("#lErr").textContent = ["auth/invalid-credential", "auth/wrong-password", "auth/user-not-found", "auth/invalid-email"].includes(err.code) ? "E-mail ou senha incorretos." : err.code === "auth/operation-not-allowed" ? "Ative o login por e-mail/senha no Firebase Authentication." : "Não foi possível entrar: " + err.code; }
+  $("#lBtn").disabled = false;
+};
+document.addEventListener("click", (e) => { if (e.target.closest("[data-sair]")) signOut(auth); });
+
+function iniciar() {
+  const ord = (a, b) => (a.ordem ?? 99) - (b.ordem ?? 99) || a.nome.localeCompare(b.nome);
+  unsub.push(onSnapshot(doc(db, COL.config, "loja"), (s) => { S.loja = { ...LOJA_PADRAO, ...(s.data() || {}) }; $("#sbNome").textContent = S.loja.nome; if (S.view === "loja" && !S._lojaEditando) render(); }, erroFirebase));
+  unsub.push(onSnapshot(collection(db, COL.categorias), (s) => { S.cats = s.docs.map((d) => ({ id: d.id, ...d.data() })).sort(ord); render(); }, erroFirebase));
+  unsub.push(onSnapshot(collection(db, COL.produtos), (s) => { S.prods = s.docs.map((d) => ({ id: d.id, ...d.data() })).sort((a, b) => a.nome.localeCompare(b.nome)); render(); }, erroFirebase));
+  unsub.push(onSnapshot(collection(db, COL.vendas), (s) => { S.vendas = s.docs.map((d) => ({ id: d.id, ...d.data(), _d: toDate(d.data().data) })).sort((a, b) => (b._d || 0) - (a._d || 0)); render(); }, erroFirebase));
+  unsub.push(onSnapshot(collection(db, COL.pedidos), (s) => { S.pedidos = s.docs.map((d) => ({ id: d.id, ...d.data(), _d: toDate(d.data().criadoEm) || new Date() })).sort((a, b) => b._d - a._d); render(); }, erroFirebase));
+  render();
+}
+
+/* ---------- Navegação ---------- */
+const IC = {
+  relatorios: '<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/>',
+  venda: '<circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.7 12.4a2 2 0 002 1.6h8.6a2 2 0 002-1.6L22 7H6"/>',
+  vendas: '<path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/>',
+  pedidos: '<path d="M21 12a9 9 0 01-13.5 7.8L3 21l1.2-4.5A9 9 0 1121 12z"/>',
+  produtos: '<path d="M6 7h12l-1 14H7z"/><path d="M9 7a3 3 0 016 0"/>',
+  categorias: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+  loja: '<path d="M3 9l1.5-5h15L21 9M3 9v11h18V9M3 9h18M9 20v-6h6v6"/>',
+};
+const NAV = [["relatorios", "Relatórios"], ["venda", "Nova venda"], ["vendas", "Vendas"], ["pedidos", "Pedidos WhatsApp"], ["produtos", "Produtos"], ["categorias", "Categorias"], ["loja", "Minha loja"]];
+function renderNav() {
+  const novos = S.pedidos.filter((p) => p.status === "novo").length;
+  const html = NAV.map(([k, t]) => `<button class="nav-i ${S.view === k ? "on" : ""}" data-nav="${k}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${IC[k]}</svg>${t}${k === "pedidos" && novos ? `<span class="bdg">${novos}</span>` : ""}</button>`).join("");
+  $("#navD").innerHTML = html;
+  $("#navM").innerHTML = html + `<button class="nav-i" data-sair>Sair</button>`;
+}
+document.addEventListener("click", (e) => { const n = e.target.closest("[data-nav]"); if (n) { S.view = n.dataset.nav; S._lojaEditando = false; render(); window.scrollTo(0, 0); } });
+
+function render() {
+  if ($("#app").classList.contains("hide")) return;
+  // não redesenhar enquanto a usuária digita em um campo da tela
+  const foco = document.activeElement;
+  const keep = foco && foco.id && $("#main").contains(foco) ? { id: foco.id, s: foco.selectionStart, e: foco.selectionEnd } : null;
+  renderNav();
+  if (S.view === "loja" && S._lojaEditando && $("#fLoja")) return; // não apagar o que está sendo editado
+  $("#main").innerHTML = VIEWS[S.view]();
+  if (keep) { const el = document.getElementById(keep.id); if (el) { el.focus(); try { el.setSelectionRange(keep.s, keep.e); } catch {} } }
+}
+
+/* ---------- Período ---------- */
+function intervalo() {
+  const hoje = new Date(); hoje.setHours(0, 0, 0, 0);
+  const fim = new Date(); fim.setHours(23, 59, 59, 999);
+  let ini;
+  switch (S.periodo) {
+    case "hoje": ini = hoje; break;
+    case "7": ini = new Date(hoje - 6 * 864e5); break;
+    case "30": ini = new Date(hoje - 29 * 864e5); break;
+    case "mes": ini = new Date(hoje.getFullYear(), hoje.getMonth(), 1); break;
+    case "ano": ini = new Date(hoje.getFullYear(), 0, 1); break;
+    case "tudo": ini = new Date(2000, 0, 1); break;
+    case "custom": {
+      ini = S.de ? new Date(S.de + "T00:00:00") : new Date(hoje - 29 * 864e5);
+      const f = S.ate ? new Date(S.ate + "T23:59:59") : fim; return [ini, f];
+    }
+  }
+  return [ini, fim];
+}
+const periodoHTML = () => `<div class="periodo">${[["hoje", "Hoje"], ["7", "7 dias"], ["30", "30 dias"], ["mes", "Este mês"], ["ano", "Este ano"], ["tudo", "Tudo"], ["custom", "Personalizado"]].map(([k, t]) => `<button data-per="${k}" class="${S.periodo === k ? "on" : ""}">${t}</button>`).join("")}
+  ${S.periodo === "custom" ? `<input type="date" id="pDe" value="${S.de}"> até <input type="date" id="pAte" value="${S.ate}">` : ""}</div>`;
+document.addEventListener("click", (e) => { const b = e.target.closest("[data-per]"); if (b) { S.periodo = b.dataset.per; render(); } });
+document.addEventListener("change", (e) => { if (e.target.id === "pDe") { S.de = e.target.value; render(); } if (e.target.id === "pAte") { S.ate = e.target.value; render(); } });
+
+const vendasNoPeriodo = () => { const [i, f] = intervalo(); return S.vendas.filter((v) => v._d && v._d >= i && v._d <= f); };
+
+/* ---------- VIEWS ---------- */
+const VIEWS = {};
+
+VIEWS.relatorios = () => {
+  const [ini, fim] = intervalo();
+  const vs = vendasNoPeriodo();
+  const fat = vs.reduce((s, v) => s + (v.total || 0), 0);
+  const itens = vs.reduce((s, v) => s + (v.itens || []).reduce((a, i) => a + (i.qtd || 0), 0), 0);
+  const ped = S.pedidos.filter((p) => p._d >= ini && p._d <= fim);
+  const ticket = vs.length ? fat / vs.length : 0;
+
+  // série temporal
+  const dias = Math.round((fim - ini) / 864e5) + 1;
+  const porMes = dias > 62;
+  const serie = new Map();
+  if (porMes) {
+    const primeira = S.periodo === "tudo" && vs.length ? vs[vs.length - 1]._d : ini;
+    for (let d = new Date(primeira.getFullYear(), primeira.getMonth(), 1); d <= fim; d.setMonth(d.getMonth() + 1)) serie.set(`${d.getFullYear()}-${d.getMonth()}`, { l: d.toLocaleDateString("pt-BR", { month: "short", year: "2-digit" }), v: 0 });
+    vs.forEach((v) => { const k = `${v._d.getFullYear()}-${v._d.getMonth()}`; if (serie.has(k)) serie.get(k).v += v.total || 0; });
+  } else {
+    for (let d = new Date(ini); d <= fim; d = new Date(d.getTime() + 864e5)) serie.set(ymd(d), { l: d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" }), v: 0 });
+    vs.forEach((v) => { const k = ymd(v._d); if (serie.has(k)) serie.get(k).v += v.total || 0; });
+  }
+  const pts = [...serie.values()]; const max = Math.max(1, ...pts.map((p) => p.v));
+  const passo = Math.ceil(pts.length / 15);
+
+  // rankings
+  const porProd = {}, porPag = {}, porCat = {};
+  vs.forEach((v) => {
+    porPag[v.pagamento || "Outro"] = (porPag[v.pagamento || "Outro"] || 0) + (v.total || 0);
+    (v.itens || []).forEach((i) => {
+      const k = i.nome; porProd[k] = porProd[k] || { q: 0, v: 0 }; porProd[k].q += i.qtd; porProd[k].v += i.qtd * i.preco;
+      const cat = S.cats.find((c) => c.id === (S.prods.find((p) => p.id === i.produtoId)?.categoriaId))?.nome || "Sem categoria";
+      porCat[cat] = (porCat[cat] || 0) + i.qtd * i.preco;
+    });
+  });
+  const hb = (obj, fmt = brl) => {
+    const arr = Object.entries(obj).sort((a, b) => (b[1].v ?? b[1]) - (a[1].v ?? a[1])).slice(0, 6);
+    if (!arr.length) return `<div class="empty" style="padding:20px">Sem dados no período</div>`;
+    const m = Math.max(...arr.map(([, x]) => x.v ?? x));
+    return arr.map(([n, x]) => `<div class="hbar"><span class="nm" title="${esc(n)}">${esc(n)}</span><span class="t"><i style="width:${((x.v ?? x) / m) * 100}%"></i></span><b>${fmt(x.v ?? x)}${x.q ? ` · ${x.q}un` : ""}</b></div>`).join("");
+  };
+  const baixo = S.prods.filter((p) => p.ativo !== false && p.estoque !== "" && p.estoque != null && Number(p.estoque) <= 2);
+  const prodPed = {}; ped.forEach((p) => (prodPed[p.produto] = (prodPed[p.produto] || 0) + 1));
+
+  return `
+  <div class="top"><div><h2>Relatórios</h2><div class="sub">${ini.toLocaleDateString("pt-BR")} – ${fim.toLocaleDateString("pt-BR")}</div></div>${periodoHTML()}</div>
+  <div class="grid g4" style="margin-bottom:16px">
+    <div class="card kpi"><small>Faturamento</small><b>${brl(fat)}</b><span>${vs.length} venda(s)</span></div>
+    <div class="card kpi"><small>Ticket médio</small><b>${brl(ticket)}</b><span>por venda</span></div>
+    <div class="card kpi"><small>Itens vendidos</small><b>${itens}</b><span>unidades</span></div>
+    <div class="card kpi"><small>Pedidos pelo WhatsApp</small><b>${ped.length}</b><span>${ped.filter((p) => p.status === "convertido").length} viraram venda</span></div>
+  </div>
+  <div class="card" style="margin-bottom:16px"><h3>Faturamento ${porMes ? "por mês" : "por dia"}</h3>
+    <div class="chart">${pts.map((p, i) => `<div class="bar"><i style="height:${(p.v / max) * 100}%" data-v="${p.l}: ${brl(p.v)}"></i><span>${i % passo === 0 ? p.l : "&nbsp;"}</span></div>`).join("")}</div></div>
+  <div class="grid g2" style="margin-bottom:16px">
+    <div class="card"><h3>Produtos mais vendidos</h3>${hb(porProd)}</div>
+    <div class="card"><h3>Formas de pagamento</h3>${hb(porPag)}</div>
+    <div class="card"><h3>Vendas por categoria</h3>${hb(porCat)}</div>
+    <div class="card"><h3>Mais procurados no WhatsApp</h3>${hb(prodPed, (n) => n + " clique(s)")}</div>
+  </div>
+  <div class="card"><h3>Estoque baixo <span class="pill warn">${baixo.length}</span></h3>
+    ${baixo.length ? baixo.map((p) => `<div class="hbar" style="grid-template-columns:1fr auto"><span class="nm">${esc(p.nome)}</span><span class="pill ${Number(p.estoque) <= 0 ? "bad" : "warn"}">${p.estoque} un</span></div>`).join("") : `<div class="muted">Tudo certo com o estoque 👌</div>`}</div>`;
+};
+
+/* ----- Nova venda (PDV) ----- */
+VIEWS.venda = () => {
+  const q = S.buscaPdv.toLowerCase();
+  const lista = S.prods.filter((p) => p.ativo !== false && (!q || p.nome.toLowerCase().includes(q)));
+  const sub = S.cart.reduce((s, i) => s + i.qtd * i.preco, 0);
+  const desc = Math.min(num(S.desconto), sub);
+  return `
+  <div class="top"><div><h2>Nova venda</h2><div class="sub">Toque no produto para adicionar</div></div>${S.pedidoOrigem ? `<span class="pill">Do pedido WhatsApp</span>` : ""}</div>
+  <div class="pdv">
+    <div class="card">
+      <input class="in" id="buscaPdv" placeholder="Buscar produto…" value="${esc(S.buscaPdv)}" style="margin-bottom:12px">
+      <div class="plist">${lista.length ? lista.map((p) => `<button class="pitem" data-add="${p.id}">${p.imagens?.[0] ? `<img src="${esc(p.imagens[0])}" alt="">` : `<span class="ni"></span>`}<div><b>${esc(p.nome)}</b><span>${pf(p) ? brl(pf(p)) : "a consultar"}</span>${p.estoque !== "" && p.estoque != null ? `<small>${p.estoque} em estoque</small>` : ""}</div></button>`).join("") : `<div class="empty" style="grid-column:1/-1">Nenhum produto. Cadastre em <b>Produtos</b>.</div>`}</div>
+      <button class="btn btn-o btn-sm" data-avulso style="margin-top:12px">+ Item avulso (sem cadastro)</button>
+    </div>
+    <div class="card" style="position:sticky;top:16px">
+      <h3>Carrinho ${S.cart.length ? `<button class="btn btn-d btn-sm" data-limpar>Limpar</button>` : ""}</h3>
+      ${S.cart.length ? S.cart.map((i, k) => {
+        const p = S.prods.find((x) => x.id === i.produtoId); const vars = (p?.variacoes || []).filter(Boolean);
+        return `<div class="cart-i"><span class="n">${esc(i.nome)}</span><b>${brl(i.qtd * i.preco)}</b>
+          <div class="ctr"><span class="qt"><button data-cq="${k}" data-d="-1">−</button><span>${i.qtd}</span><button data-cq="${k}" data-d="1">+</button></span>
+          R$ <input class="in" style="width:86px" id="cp${k}" data-cp="${k}" value="${fmtN(i.preco)}" inputmode="decimal">
+          ${vars.length ? `<select class="in" style="width:auto" data-cv="${k}"><option value="">Opção…</option>${vars.map((v) => `<option ${i.variacao === v ? "selected" : ""}>${esc(v)}</option>`).join("")}</select>` : ""}
+          <button class="btn btn-d btn-sm" data-cr="${k}" style="margin-left:auto">Remover</button></div></div>`;
+      }).join("") : `<div class="empty" style="padding:24px">Carrinho vazio</div>`}
+      <div style="margin-top:14px">
+        <div class="f"><label>Cliente (opcional)</label><input class="in" id="vCli" value="${esc(S.cliente)}" placeholder="Nome ou telefone"></div>
+        <div class="f"><label>Pagamento</label><div class="pay">${PAGAMENTOS.map((p) => `<button data-pag="${p}" class="${S.pag === p ? "on" : ""}">${p}</button>`).join("")}</div></div>
+        <div class="row"><div class="f"><label>Desconto (R$)</label><input class="in" id="vDesc" value="${esc(S.desconto)}" inputmode="decimal" placeholder="0,00"></div>
+        <div class="f"><label>Observação</label><input class="in" id="vObs" value="${esc(S.obs)}" placeholder="Ex.: entrega"></div></div>
+        <div class="tot"><span class="muted">Subtotal</span><span>${brl(sub)}</span></div>
+        ${desc ? `<div class="tot"><span class="muted">Desconto</span><span>− ${brl(desc)}</span></div>` : ""}
+        <div class="tot big"><span>Total</span><span>${brl(sub - desc)}</span></div>
+        <button class="btn btn-p btn-block" data-finalizar ${S.cart.length ? "" : "disabled"} style="margin-top:12px">Finalizar venda</button>
+      </div>
+    </div>
+  </div>`;
+};
+const pf = (p) => (p.precoPromo && num(p.precoPromo) < num(p.preco) ? num(p.precoPromo) : num(p.preco));
+function addCart(p, variacao = "", qtd = 1) {
+  const ex = S.cart.find((i) => i.produtoId === p.id && i.variacao === variacao);
+  if (ex) ex.qtd += qtd; else S.cart.push({ produtoId: p.id, nome: p.nome, preco: pf(p), qtd, variacao });
+}
+document.addEventListener("click", async (e) => {
+  const t = e.target;
+  const a = t.closest("[data-add]"); if (a) { const p = S.prods.find((x) => x.id === a.dataset.add); addCart(p); render(); return; }
+  if (t.closest("[data-avulso]")) { const nome = prompt("Descrição do item:"); if (!nome) return; const pr = num(prompt("Valor (R$):", "0,00")); S.cart.push({ produtoId: null, nome, preco: pr, qtd: 1, variacao: "" }); render(); return; }
+  const cq = t.closest("[data-cq]"); if (cq) { const i = S.cart[cq.dataset.cq]; i.qtd = Math.max(1, i.qtd + Number(cq.dataset.d)); render(); return; }
+  const cr = t.closest("[data-cr]"); if (cr) { S.cart.splice(cr.dataset.cr, 1); render(); return; }
+  if (t.closest("[data-limpar]")) { S.cart = []; S.pedidoOrigem = null; render(); return; }
+  const pg = t.closest("[data-pag]"); if (pg) { S.pag = pg.dataset.pag; render(); return; }
+  if (t.closest("[data-finalizar]")) finalizarVenda();
+});
+document.addEventListener("input", (e) => {
+  const t = e.target;
+  if (t.id === "buscaPdv") { S.buscaPdv = t.value; render(); }
+  if (t.id === "vCli") S.cliente = t.value;
+  if (t.id === "vObs") S.obs = t.value;
+  if (t.id === "vDesc") { S.desconto = t.value; }
+  if (t.dataset.cp !== undefined) S.cart[t.dataset.cp].preco = num(t.value);
+});
+document.addEventListener("change", (e) => {
+  const t = e.target;
+  if (t.id === "vDesc" || t.dataset.cp !== undefined) render();
+  if (t.dataset.cv !== undefined) S.cart[t.dataset.cv].variacao = t.value;
+});
+
+async function finalizarVenda() {
+  if (!S.cart.length) return;
+  const sub = S.cart.reduce((s, i) => s + i.qtd * i.preco, 0);
+  const desc = Math.min(num(S.desconto), sub);
+  const btn = $("[data-finalizar]"); btn.disabled = true; btn.textContent = "Salvando…";
+  try {
+    const b = writeBatch(db);
+    const ref = doc(collection(db, COL.vendas));
+    b.set(ref, { itens: S.cart.map((i) => ({ ...i })), subtotal: sub, desconto: desc, total: sub - desc, pagamento: S.pag, cliente: S.cliente.trim(), obs: S.obs.trim(), origem: S.pedidoOrigem ? "whatsapp" : "loja", pedidoId: S.pedidoOrigem || null, data: Timestamp.now(), criadoEm: serverTimestamp() });
+    S.cart.forEach((i) => { const p = S.prods.find((x) => x.id === i.produtoId); if (p && p.estoque !== "" && p.estoque != null) b.update(doc(db, COL.produtos, p.id), { estoque: increment(-i.qtd) }); });
+    if (S.pedidoOrigem) b.update(doc(db, COL.pedidos, S.pedidoOrigem), { status: "convertido" });
+    await b.commit();
+    Object.assign(S, { cart: [], desconto: "", cliente: "", obs: "", pedidoOrigem: null });
+    toast(`Venda de ${brl(sub - desc)} registrada ✔`); render();
+  } catch (err) { erroFirebase(err); btn.disabled = false; btn.textContent = "Finalizar venda"; }
+}
+
+/* ----- Vendas ----- */
+VIEWS.vendas = () => {
+  const q = S.buscaVendas.toLowerCase();
+  const vs = vendasNoPeriodo().filter((v) => !q || (v.cliente + " " + (v.itens || []).map((i) => i.nome).join(" ")).toLowerCase().includes(q));
+  const tot = vs.reduce((s, v) => s + (v.total || 0), 0);
+  return `
+  <div class="top"><div><h2>Vendas</h2><div class="sub">${vs.length} venda(s) · ${brl(tot)}</div></div><div style="display:flex;gap:8px"><button class="btn btn-o" data-csv>Exportar planilha</button><button class="btn btn-p" data-nav="venda">+ Nova venda</button></div></div>
+  <div class="toolbar">${periodoHTML()}<input class="in" id="buscaVendas" placeholder="Buscar cliente ou produto…" value="${esc(S.buscaVendas)}"></div>
+  <div class="tbl-w">${vs.length ? `<table><thead><tr><th>Data</th><th>Cliente</th><th>Itens</th><th>Pagamento</th><th class="num">Total</th><th></th></tr></thead><tbody>
+    ${vs.map((v) => `<tr><td style="white-space:nowrap">${fData(v._d)}</td><td>${esc(v.cliente || "—")}${v.origem === "whatsapp" ? ` <span class="pill ok">WhatsApp</span>` : ""}</td>
+      <td>${(v.itens || []).map((i) => `${i.qtd}× ${esc(i.nome)}${i.variacao ? ` (${esc(i.variacao)})` : ""}`).join("<br>")}${v.obs ? `<br><small class="muted">${esc(v.obs)}</small>` : ""}</td>
+      <td>${esc(v.pagamento)}</td><td class="num"><b>${brl(v.total)}</b>${v.desconto ? `<br><small class="muted">desc. ${brl(v.desconto)}</small>` : ""}</td>
+      <td><div class="acts"><button class="btn btn-d btn-sm" data-delvenda="${v.id}">Excluir</button></div></td></tr>`).join("")}
+  </tbody></table>` : `<div class="empty">Nenhuma venda neste período.</div>`}</div>`;
+};
+document.addEventListener("input", (e) => { if (e.target.id === "buscaVendas") { S.buscaVendas = e.target.value; render(); } });
+document.addEventListener("click", async (e) => {
+  const d = e.target.closest("[data-delvenda]");
+  if (d) {
+    const v = S.vendas.find((x) => x.id === d.dataset.delvenda);
+    if (!confirm("Excluir esta venda? O estoque dos produtos será devolvido.")) return;
+    try {
+      const b = writeBatch(db); b.delete(doc(db, COL.vendas, v.id));
+      (v.itens || []).forEach((i) => { const p = S.prods.find((x) => x.id === i.produtoId); if (p && p.estoque !== "" && p.estoque != null) b.update(doc(db, COL.produtos, p.id), { estoque: increment(i.qtd) }); });
+      await b.commit(); toast("Venda excluída");
+    } catch (err) { erroFirebase(err); }
+  }
+  if (e.target.closest("[data-csv]")) {
+    const linhas = [["Data", "Cliente", "Itens", "Pagamento", "Subtotal", "Desconto", "Total", "Origem"]].concat(vendasNoPeriodo().map((v) => [fData(v._d), v.cliente || "", (v.itens || []).map((i) => `${i.qtd}x ${i.nome}${i.variacao ? " (" + i.variacao + ")" : ""}`).join(" | "), v.pagamento, fmtN(v.subtotal), fmtN(v.desconto), fmtN(v.total), v.origem]));
+    const csv = "﻿" + linhas.map((l) => l.map((c) => `"${String(c ?? "").replace(/"/g, '""')}"`).join(";")).join("\n");
+    const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" })); a.download = `vendas-${ymd(new Date())}.csv`; a.click();
+  }
+});
+
+/* ----- Pedidos WhatsApp ----- */
+const ST = { novo: ["Novo", "warn"], atendido: ["Atendido", ""], convertido: ["Virou venda", "ok"], cancelado: ["Cancelado", "mut"] };
+VIEWS.pedidos = () => `
+  <div class="top"><div><h2>Pedidos pelo WhatsApp</h2><div class="sub">Cada clique em "Comprar" no catálogo aparece aqui</div></div></div>
+  <div class="tbl-w">${S.pedidos.length ? `<table><thead><tr><th>Quando</th><th>Produto</th><th>Opção</th><th class="num">Qtd</th><th class="num">Valor</th><th>Status</th><th></th></tr></thead><tbody>
+  ${S.pedidos.map((p) => `<tr><td style="white-space:nowrap">${fData(p._d)}</td><td>${esc(p.produto)}</td><td>${esc(p.variacao || "—")}</td><td class="num">${p.qtd || 1}</td><td class="num">${brl((p.preco || 0) * (p.qtd || 1))}</td>
+    <td><span class="pill ${ST[p.status]?.[1] || ""}">${ST[p.status]?.[0] || esc(p.status)}</span></td>
+    <td><div class="acts">${p.status !== "convertido" ? `<button class="btn btn-g btn-sm" data-conv="${p.id}">Registrar venda</button>` : ""}
+      ${p.status === "novo" ? `<button class="btn btn-o btn-sm" data-pst="${p.id}" data-s="atendido">Atendido</button>` : ""}
+      ${p.status !== "cancelado" && p.status !== "convertido" ? `<button class="btn btn-o btn-sm" data-pst="${p.id}" data-s="cancelado">Cancelar</button>` : ""}
+      <button class="btn btn-d btn-sm" data-pdel="${p.id}">Excluir</button></div></td></tr>`).join("")}
+  </tbody></table>` : `<div class="empty">Ainda não há pedidos. Quando um cliente clicar em "Comprar" no catálogo, ele aparece aqui.</div>`}</div>`;
+document.addEventListener("click", async (e) => {
+  const c = e.target.closest("[data-conv]");
+  if (c) {
+    const pd = S.pedidos.find((x) => x.id === c.dataset.conv);
+    const p = S.prods.find((x) => x.id === pd.produtoId);
+    S.cart = [{ produtoId: p ? p.id : null, nome: pd.produto, preco: pd.preco || 0, qtd: pd.qtd || 1, variacao: pd.variacao || "" }];
+    S.pedidoOrigem = pd.id; S.view = "venda"; render(); return;
+  }
+  const s = e.target.closest("[data-pst]"); if (s) updateDoc(doc(db, COL.pedidos, s.dataset.pst), { status: s.dataset.s }).catch(erroFirebase);
+  const d = e.target.closest("[data-pdel]"); if (d && confirm("Excluir este pedido?")) deleteDoc(doc(db, COL.pedidos, d.dataset.pdel)).catch(erroFirebase);
+});
+
+/* ----- Produtos ----- */
+VIEWS.produtos = () => {
+  const q = S.buscaProd.toLowerCase();
+  const lista = S.prods.filter((p) => (!q || p.nome.toLowerCase().includes(q)) && (!S.filtroCatProd || p.categoriaId === S.filtroCatProd));
+  const cn = (id) => S.cats.find((c) => c.id === id)?.nome || "—";
+  return `
+  <div class="top"><div><h2>Produtos</h2><div class="sub">${S.prods.length} cadastrado(s) · ${S.prods.filter((p) => p.ativo !== false).length} no catálogo</div></div><div style="display:flex;gap:8px;flex-wrap:wrap">${S.prods.some((p) => p.exemplo) ? `<button class="btn btn-d" data-delexemplos>Remover importados</button>` : `<button class="btn btn-g" data-exemplos>+ Importar do Instagram</button>`}<button class="btn btn-p" data-novoprod>+ Novo produto</button></div></div>
+  <div class="toolbar"><input class="in" id="buscaProd" placeholder="Buscar produto…" value="${esc(S.buscaProd)}">
+    <select class="in" id="filtroCatProd" style="max-width:220px"><option value="">Todas as categorias</option>${S.cats.map((c) => `<option value="${c.id}" ${S.filtroCatProd === c.id ? "selected" : ""}>${esc(c.nome)}</option>`).join("")}</select></div>
+  <div class="tbl-w">${lista.length ? `<table><thead><tr><th></th><th>Produto</th><th>Categoria</th><th class="num">Preço</th><th class="num">Estoque</th><th>Catálogo</th><th></th></tr></thead><tbody>
+  ${lista.map((p) => `<tr><td style="width:60px">${p.imagens?.[0] ? `<img class="thumb" src="${esc(p.imagens[0])}" alt="">` : `<span class="thumb"></span>`}</td>
+    <td><b style="font-weight:600">${esc(p.nome)}</b>${p.destaque ? ` <span class="pill">Destaque</span>` : ""}${(p.variacoes || []).length ? `<br><small class="muted">${esc(p.variacoes.join(", "))}</small>` : ""}</td>
+    <td>${esc(cn(p.categoriaId))}</td>
+    <td class="num">${!num(p.preco) ? `<span class="pill warn">a consultar</span>` : p.precoPromo && num(p.precoPromo) < num(p.preco) ? `<s class="muted" style="font-size:12px">${brl(p.preco)}</s><br><b>${brl(p.precoPromo)}</b>` : brl(p.preco)}</td>
+    <td class="num">${p.estoque === "" || p.estoque == null ? "—" : `<span class="pill ${Number(p.estoque) <= 0 ? "bad" : Number(p.estoque) <= 2 ? "warn" : "ok"}">${p.estoque}</span>`}</td>
+    <td><label class="check"><input type="checkbox" data-ativo="${p.id}" ${p.ativo !== false ? "checked" : ""}>${p.ativo !== false ? "Visível" : "Oculto"}</label></td>
+    <td><div class="acts"><button class="btn btn-g btn-sm" data-edprod="${p.id}">Editar</button><button class="btn btn-o btn-sm" data-dupprod="${p.id}">Duplicar</button><button class="btn btn-d btn-sm" data-delprod="${p.id}">Excluir</button></div></td></tr>`).join("")}
+  </tbody></table>` : `<div class="empty">${S.prods.length ? "Nenhum produto encontrado." : `Nenhum produto ainda. ${S.cats.length ? "" : "Comece criando as <b>Categorias</b>, depois "}clique em <b>+ Novo produto</b>.<br><br><button class="btn btn-g" data-exemplos>Importar ${EXEMPLOS.length} produtos do Instagram</button>`}</div>`}</div>`;
+};
+document.addEventListener("input", (e) => { if (e.target.id === "buscaProd") { S.buscaProd = e.target.value; render(); } });
+document.addEventListener("change", (e) => {
+  if (e.target.id === "filtroCatProd") { S.filtroCatProd = e.target.value; render(); }
+  if (e.target.dataset.ativo) updateDoc(doc(db, COL.produtos, e.target.dataset.ativo), { ativo: e.target.checked }).catch(erroFirebase);
+});
+
+let edit = null; // produto em edição
+function abrirModal(html) { $("#mbox").innerHTML = `<button class="x" data-fechar>×</button>` + html; $("#modal").classList.add("open"); }
+function fecharModal() { $("#modal").classList.remove("open"); edit = null; }
+$("#modal").addEventListener("mousedown", (e) => { if (e.target.id === "modal") fecharModal(); });
+document.addEventListener("click", (e) => { if (e.target.closest("[data-fechar]")) fecharModal(); });
+
+function formProduto(p) {
+  edit = { id: p?.id || null, imagens: [...(p?.imagens || [])] };
+  abrirModal(`<h3>${p?.id ? "Editar produto" : "Novo produto"}</h3>
+  <form id="fProd">
+    <div class="f"><label>Nome do produto *</label><input class="in" name="nome" required value="${esc(p?.nome || "")}" placeholder="Ex.: Bolsa transversal couro caramelo"></div>
+    <div class="row">
+      <div class="f"><label>Categoria</label><select class="in" name="categoriaId"><option value="">Sem categoria</option>${S.cats.map((c) => `<option value="${c.id}" ${p?.categoriaId === c.id ? "selected" : ""}>${esc(c.nome)}</option>`).join("")}</select></div>
+      <div class="f"><label>Estoque (deixe vazio p/ não controlar)</label><input class="in" name="estoque" inputmode="numeric" value="${p?.estoque ?? ""}" placeholder="Ex.: 5"></div>
+    </div>
+    <div class="row">
+      <div class="f"><label>Preço (R$) · 0 = "consulte o preço"</label><input class="in" name="preco" inputmode="decimal" value="${p?.preco != null ? fmtN(p.preco) : ""}" placeholder="0,00"></div>
+      <div class="f"><label>Preço promocional (R$)</label><input class="in" name="precoPromo" inputmode="decimal" value="${p?.precoPromo ? fmtN(p.precoPromo) : ""}" placeholder="opcional"></div>
+    </div>
+    <div class="f"><label>Opções / variações (separe por vírgula)</label><input class="in" name="variacoes" value="${esc((p?.variacoes || []).join(", "))}" placeholder="Ex.: Preto, Caramelo, Off-white"></div>
+    <div class="f"><label>Descrição</label><textarea class="in" name="descricao" placeholder="Material, medidas, detalhes…">${esc(p?.descricao || "")}</textarea></div>
+    <div class="f"><label>Fotos (até 5 · a primeira é a capa)</label><div class="imgs" id="imgsBox"></div>
+      <div style="display:flex;gap:8px;margin-top:6px"><input class="in" id="imgUrl" placeholder="…ou cole o link de uma imagem"><button type="button" class="btn btn-o" data-imgurl>Adicionar</button></div></div>
+    <div style="display:flex;gap:20px;flex-wrap:wrap;margin:4px 0 8px">
+      <label class="check"><input type="checkbox" name="ativo" ${p?.ativo !== false ? "checked" : ""}> Mostrar no catálogo</label>
+      <label class="check"><input type="checkbox" name="destaque" ${p?.destaque ? "checked" : ""}> Destaque</label>
+    </div>
+    <div class="mfoot"><button type="button" class="btn btn-o" data-fechar>Cancelar</button><button class="btn btn-p" id="salvarProd">Salvar produto</button></div>
+  </form>`);
+  renderImgs();
+}
+function renderImgs() {
+  const box = $("#imgsBox"); if (!box) return;
+  box.innerHTML = edit.imagens.map((u, i) => `<div class="im"><img src="${esc(u)}" alt="">${i === 0 ? `<span class="cap">capa</span>` : `<span class="cap" style="background:rgba(0,0,0,.55);cursor:pointer" data-capa="${i}">tornar capa</span>`}<button type="button" data-rmimg="${i}">×</button></div>`).join("")
+    + (edit.imagens.length < 5 ? `<label class="add" data-pick>＋<br>Enviar foto</label>` : "");
+}
+function comprimir(file, max = 900, q = 0.78) {
+  return new Promise((res, rej) => {
+    const img = new Image();
+    img.onload = () => {
+      const s = Math.min(1, max / Math.max(img.width, img.height));
+      const c = document.createElement("canvas"); c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
+      const x = c.getContext("2d"); x.fillStyle = "#fff"; x.fillRect(0, 0, c.width, c.height); x.drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(img.src); res(c.toDataURL("image/jpeg", q));
+    };
+    img.onerror = rej; img.src = URL.createObjectURL(file);
+  });
+}
+let fileTarget = null;
+document.addEventListener("click", (e) => {
+  const t = e.target;
+  if (t.closest("[data-pick]")) { fileTarget = "prod"; $("#fileIn").multiple = true; $("#fileIn").click(); }
+  const rm = t.closest("[data-rmimg]"); if (rm) { edit.imagens.splice(rm.dataset.rmimg, 1); renderImgs(); }
+  const cp = t.closest("[data-capa]"); if (cp) { const [im] = edit.imagens.splice(cp.dataset.capa, 1); edit.imagens.unshift(im); renderImgs(); }
+  if (t.closest("[data-imgurl]")) { const u = $("#imgUrl").value.trim(); if (/^https?:\/\//.test(u) && edit.imagens.length < 5) { edit.imagens.push(u); $("#imgUrl").value = ""; renderImgs(); } else toast("Cole um link válido (https://…)", true); }
+  if (t.closest("[data-novoprod]")) formProduto(null);
+  const ed = t.closest("[data-edprod]"); if (ed) formProduto(S.prods.find((p) => p.id === ed.dataset.edprod));
+  const du = t.closest("[data-dupprod]"); if (du) { const p = S.prods.find((x) => x.id === du.dataset.dupprod); formProduto({ ...p, id: null, nome: p.nome + " (cópia)" }); }
+  const dl = t.closest("[data-delprod]"); if (dl && confirm("Excluir este produto do catálogo? As vendas já registradas continuam no relatório.")) deleteDoc(doc(db, COL.produtos, dl.dataset.delprod)).then(() => toast("Produto excluído")).catch(erroFirebase);
+  if (t.closest("[data-logo]")) { fileTarget = "logo"; $("#fileIn").multiple = false; $("#fileIn").click(); }
+  if (t.closest("[data-banner]")) { fileTarget = "banner"; $("#fileIn").multiple = false; $("#fileIn").click(); }
+});
+$("#fileIn").onchange = async (e) => {
+  const files = [...e.target.files]; e.target.value = "";
+  try {
+    if (fileTarget === "prod") {
+      for (const f of files.slice(0, 5 - edit.imagens.length)) edit.imagens.push(await comprimir(f));
+      renderImgs();
+    } else if (fileTarget === "logo" || fileTarget === "banner") {
+      const url = await comprimir(files[0], fileTarget === "logo" ? 400 : 1100, 0.8);
+      S._lojaTmp[fileTarget] = url; $("#" + fileTarget + "Prev").src = url;
+    }
+  } catch { toast("Não foi possível ler a imagem", true); }
+};
+document.addEventListener("submit", async (e) => {
+  if (e.target.id !== "fProd") return;
+  e.preventDefault();
+  const f = new FormData(e.target);
+  const estoqueRaw = String(f.get("estoque")).trim();
+  const dados = {
+    nome: f.get("nome").trim(), categoriaId: f.get("categoriaId"), preco: num(f.get("preco")),
+    precoPromo: f.get("precoPromo") ? num(f.get("precoPromo")) : null,
+    estoque: estoqueRaw === "" ? "" : parseInt(estoqueRaw) || 0,
+    variacoes: String(f.get("variacoes")).split(",").map((s) => s.trim()).filter(Boolean),
+    descricao: f.get("descricao").trim(), imagens: edit.imagens, ativo: !!f.get("ativo"), destaque: !!f.get("destaque"), atualizadoEm: serverTimestamp(),
+  };
+  if (edit.imagens.join("").length > 900000) return toast("As fotos estão muito pesadas. Remova uma ou use fotos menores.", true);
+  const b = $("#salvarProd"); b.disabled = true; b.textContent = "Salvando…";
+  try {
+    if (edit.id) await updateDoc(doc(db, COL.produtos, edit.id), dados);
+    else await addDoc(collection(db, COL.produtos), { ...dados, criadoEm: serverTimestamp() });
+    fecharModal(); toast("Produto salvo ✔");
+  } catch (err) { erroFirebase(err); b.disabled = false; b.textContent = "Salvar produto"; }
+});
+
+/* ----- Produtos do Instagram (@lojamenezzi) ----- */
+const U = (id) => `img/produtos/${id}.jpg`;
+const EXEMPLOS = [
+  { cat: "Bolsas", nome: "Bolsa baguete premium 3 alças", preco: 69.9, estoque: "", variacoes: [], destaque: true, imgs: ["DfSJxM1xJ9e", "DfSJ0nuRtIQ", "DfSJoeGxi0P"], descricao: "Bolsa baguete premium que acompanha 3 alças para usar de jeitos diferentes." },
+  { cat: "Cintos", nome: "Cinto country em camurça", preco: 69.9, estoque: "", variacoes: ["Marrom", "Caramelo", "Preto"], destaque: true, imgs: ["DfR2lSPRnj7"], descricao: "Cinto country em camurça com fivela redonda e acabamento em tachas.\nParcele em até 2x sem juros." },
+  { cat: "Bolsas", nome: "Bolsa tiracolo com fecho metálico", preco: 0, estoque: "", variacoes: [], imgs: ["Df2g4xGzC6I"], descricao: "Bolsa tiracolo estruturada com fecho metálico dourado e alça de corrente." },
+  { cat: "Cintos", nome: "Cinto com tachas", preco: 0, estoque: "", variacoes: [], imgs: ["DfSFlkSxhUk"], descricao: "Cintos com tachas metálicas em várias cores. Consulte as opções disponíveis." },
+  { cat: "Cintos", nome: "Cinto largo preto com correntes", preco: 0, estoque: "", variacoes: [], imgs: ["DfSFfsrxy8f"], descricao: "Cinto largo preto com detalhes em corrente dourada." },
+];
+async function criarExemplos() {
+  if (!confirm(`Adicionar os ${EXEMPLOS.length} produtos do Instagram ao catálogo? Depois você pode editar preço, estoque e fotos de cada um.`)) return;
+  try {
+    const b = writeBatch(db), idCat = {};
+    S.cats.forEach((c) => (idCat[c.nome.toLowerCase()] = c.id));
+    let ordem = S.cats.length;
+    for (const nome of [...new Set(EXEMPLOS.map((e) => e.cat))]) {
+      if (idCat[nome.toLowerCase()]) continue;
+      const ref = doc(collection(db, COL.categorias)); b.set(ref, { nome, ordem: ordem++ }); idCat[nome.toLowerCase()] = ref.id;
+    }
+    EXEMPLOS.forEach(({ cat, imgs, ...p }) => b.set(doc(collection(db, COL.produtos)), {
+      ...p, precoPromo: p.precoPromo ?? null, destaque: !!p.destaque, categoriaId: idCat[cat.toLowerCase()], imagens: imgs.map(U), ativo: true, exemplo: true, criadoEm: serverTimestamp(), atualizadoEm: serverTimestamp(),
+    }));
+    await b.commit(); toast(`${EXEMPLOS.length} produtos do Instagram adicionados ✔`);
+  } catch (err) { erroFirebase(err); }
+}
+document.addEventListener("click", (e) => {
+  if (e.target.closest("[data-exemplos]")) criarExemplos();
+  if (e.target.closest("[data-delexemplos]")) {
+    const ex = S.prods.filter((p) => p.exemplo); if (!ex.length || !confirm(`Excluir os ${ex.length} produtos importados do Instagram?`)) return;
+    const b = writeBatch(db); ex.forEach((p) => b.delete(doc(db, COL.produtos, p.id))); b.commit().then(() => toast("Produtos importados removidos")).catch(erroFirebase);
+  }
+});
+
+/* ----- Categorias ----- */
+const SUGEST = ["Bolsas", "Bolsas de festa", "Carteiras", "Cintos", "Óculos", "Relógios", "Perfumaria", "Kits e combos", "Infantil", "Presentes"];
+VIEWS.categorias = () => {
+  const cont = (id) => S.prods.filter((p) => p.categoriaId === id).length;
+  const falt = SUGEST.filter((s) => !S.cats.some((c) => c.nome.toLowerCase() === s.toLowerCase()));
+  return `
+  <div class="top"><div><h2>Categorias</h2><div class="sub">Organizam o catálogo em abas para o cliente</div></div></div>
+  <div class="grid g2" style="align-items:start">
+    <div class="card"><h3>Nova categoria</h3>
+      <form id="fCat" style="display:flex;gap:8px"><input class="in" id="catNome" placeholder="Ex.: Bolsas" required><button class="btn btn-p">Adicionar</button></form>
+      ${falt.length ? `<p class="muted" style="margin:16px 0 8px;font-size:12.5px">Sugestões para a MENEZZI (toque para criar):</p><div style="display:flex;gap:6px;flex-wrap:wrap">${falt.map((s) => `<button class="btn btn-g btn-sm" data-sug="${esc(s)}">+ ${esc(s)}</button>`).join("")}</div>` : ""}
+    </div>
+    <div class="card"><h3>Suas categorias <span class="pill">${S.cats.length}</span></h3>
+      ${S.cats.length ? S.cats.map((c, i) => `<div class="cat-row">
+        <span style="display:flex;flex-direction:column"><button class="btn-sm" data-cup="${i}" ${i ? "" : "disabled"} title="Subir">▲</button><button class="btn-sm" data-cdown="${i}" ${i < S.cats.length - 1 ? "" : "disabled"} title="Descer">▼</button></span>
+        <input class="in" value="${esc(c.nome)}" data-cren="${c.id}">
+        <span class="pill">${cont(c.id)} prod.</span>
+        <button class="btn btn-d btn-sm" data-cdel="${c.id}">Excluir</button></div>`).join("") : `<div class="muted">Nenhuma categoria ainda.</div>`}
+    </div>
+  </div>`;
+};
+const novaCat = (nome) => addDoc(collection(db, COL.categorias), { nome, ordem: S.cats.length }).then(() => toast(`Categoria "${nome}" criada`)).catch(erroFirebase);
+document.addEventListener("submit", (e) => { if (e.target.id === "fCat") { e.preventDefault(); const n = $("#catNome").value.trim(); if (n) novaCat(n); } });
+document.addEventListener("click", async (e) => {
+  const sg = e.target.closest("[data-sug]"); if (sg) novaCat(sg.dataset.sug);
+  const del = e.target.closest("[data-cdel]");
+  if (del) { const n = S.prods.filter((p) => p.categoriaId === del.dataset.cdel).length; if (n) return toast(`Essa categoria tem ${n} produto(s). Mude-os de categoria antes.`, true); if (confirm("Excluir categoria?")) deleteDoc(doc(db, COL.categorias, del.dataset.cdel)).catch(erroFirebase); }
+  const up = e.target.closest("[data-cup]"), dn = e.target.closest("[data-cdown]");
+  if (up || dn) {
+    const i = Number((up || dn).dataset[up ? "cup" : "cdown"]), j = up ? i - 1 : i + 1;
+    const arr = [...S.cats]; [arr[i], arr[j]] = [arr[j], arr[i]];
+    const b = writeBatch(db); arr.forEach((c, k) => b.update(doc(db, COL.categorias, c.id), { ordem: k })); b.commit().catch(erroFirebase);
+  }
+});
+document.addEventListener("change", (e) => { const r = e.target.dataset.cren; if (r && e.target.value.trim()) updateDoc(doc(db, COL.categorias, r), { nome: e.target.value.trim() }).then(() => toast("Categoria renomeada")).catch(erroFirebase); });
+
+/* ----- Minha loja ----- */
+VIEWS.loja = () => {
+  S._lojaTmp = { logo: S.loja.logo, banner: S.loja.banner };
+  const L = S.loja;
+  return `
+  <div class="top"><div><h2>Minha loja</h2><div class="sub">Informações que aparecem no catálogo</div></div></div>
+  <form id="fLoja" class="grid g2" style="align-items:start">
+    <div class="card">
+      <div class="f"><label>Nome da loja</label><input class="in" name="nome" value="${esc(L.nome)}"></div>
+      <div class="f"><label>Frase de destaque</label><input class="in" name="slogan" value="${esc(L.slogan)}"></div>
+      <div class="f"><label>Sobre a loja</label><textarea class="in" name="descricao">${esc(L.descricao)}</textarea></div>
+      <div class="f"><label>WhatsApp de vendas (com DDD) *</label><input class="in" name="whatsapp" value="${esc(L.whatsapp)}" placeholder="Ex.: 75 99999-9999" inputmode="tel">
+        <small class="muted">Com o número, a mensagem já vai pronta com o produto escolhido.</small></div>
+      <div class="row"><div class="f"><label>Instagram</label><input class="in" name="instagram" value="${esc(L.instagram)}"></div>
+      <div class="f"><label>Horário</label><input class="in" name="horario" value="${esc(L.horario)}"></div></div>
+      <div class="f"><label>Endereço</label><input class="in" name="endereco" value="${esc(L.endereco)}"></div>
+    </div>
+    <div class="card">
+      <div class="f"><label>Logo</label><div style="display:flex;gap:14px;align-items:center"><img class="logo-prev" id="logoPrev" src="${esc(L.logo || "data:image/gif;base64,R0lGODlhAQABAAAAACw=")}" alt=""><button type="button" class="btn btn-o" data-logo>Enviar logo</button></div></div>
+      <div class="f"><label>Imagem de capa (vertical)</label><img class="ban-prev" id="bannerPrev" src="${esc(L.banner || "data:image/gif;base64,R0lGODlhAQABAAAAACw=")}" alt=""><button type="button" class="btn btn-o" data-banner style="margin-top:8px;align-self:flex-start">Enviar capa</button></div>
+      <div class="mfoot" style="border:0;padding:0"><button class="btn btn-p" id="salvarLoja">Salvar informações</button></div>
+    </div>
+  </form>`;
+};
+document.addEventListener("focusin", (e) => { if (e.target.closest("#fLoja")) S._lojaEditando = true; });
+document.addEventListener("click", (e) => { if (e.target.closest("[data-logo],[data-banner]")) S._lojaEditando = true; }, true);
+document.addEventListener("submit", async (e) => {
+  if (e.target.id !== "fLoja") return; e.preventDefault();
+  const f = Object.fromEntries(new FormData(e.target));
+  Object.keys(f).forEach((k) => (f[k] = String(f[k]).trim()));
+  try { await setDoc(doc(db, COL.config, "loja"), { ...f, ...S._lojaTmp }, { merge: true }); S._lojaEditando = false; toast("Informações salvas ✔"); }
+  catch (err) { erroFirebase(err); }
+});
+</script>
+</body>
+</html>
